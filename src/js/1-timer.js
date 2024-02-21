@@ -27,7 +27,6 @@ const options = {
     onClose(selectedDates,date) {
 
         startButton.setAttribute("disabled", "disabled")
-        console.log(dateInput)
         if (selectedDates[0] <= Date.now()) {
 
             iziToast.show({
@@ -65,20 +64,22 @@ function convertMs(ms) {
 }
 
 startButton.addEventListener("click", (event) => {
-    startButton.setAttribute("disabled", "disabled")
-    dateInput.setAttribute("disabled", "disabled")
-  const intervalId = setInterval(() => {
+  startButton.setAttribute("disabled", "disabled")
+  dateInput.setAttribute("disabled", "disabled")
+  
+    const intervalId = setInterval(() => {
     const { days, hours, minutes, seconds } = convertMs(userDate - Date.now());
     daysValue.textContent = String(days).padStart(2, '0')
     hoursValue.textContent = String(hours).padStart(2, "0")
     minutesValue.textContent = String(minutes).padStart(2, "0")
     secondsValue.textContent = String(seconds).padStart(2, '0')
-    if (userDate < Date.now()) {
-      console.log("stop")
-      }
+      
+    if (userDate - Date.now() < 1000) {
+      clearInterval(intervalId)
+    }
 
-  }, 1000);
-
+    }, 1000);
 })
+
 
 flatpickr(dateInput, options)
