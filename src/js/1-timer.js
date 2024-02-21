@@ -6,6 +6,8 @@ const daysValue = document.querySelector("span[data-days]")
 const hoursValue = document.querySelector("span[data-hours]")
 const minutesValue = document.querySelector("span[data-minutes]")
 const secondsValue = document.querySelector("span[data-seconds]")
+startButton.setAttribute("disabled", "disabled")
+
 
 import flatpickr from "flatpickr";
 
@@ -16,7 +18,6 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
 let userDate;
-const startTime = Date.now()
 
 const options = {
   enableTime: true,
@@ -26,7 +27,7 @@ const options = {
     onClose(selectedDates,date) {
 
         startButton.setAttribute("disabled", "disabled")
-
+        console.log(dateInput)
         if (selectedDates[0] <= Date.now()) {
 
             iziToast.show({
@@ -43,7 +44,6 @@ const options = {
   },
 };
 
-flatpickr(dateInput, options)
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -66,15 +66,19 @@ function convertMs(ms) {
 
 startButton.addEventListener("click", (event) => {
     startButton.setAttribute("disabled", "disabled")
-    dateInput.setAttribute("disbled", "disabled")
+    dateInput.setAttribute("disabled", "disabled")
+  const intervalId = setInterval(() => {
+    const { days, hours, minutes, seconds } = convertMs(userDate - Date.now());
+    daysValue.textContent = String(days).padStart(2, '0')
+    hoursValue.textContent = String(hours).padStart(2, "0")
+    minutesValue.textContent = String(minutes).padStart(2, "0")
+    secondsValue.textContent = String(seconds).padStart(2, '0')
+    if (userDate < Date.now()) {
+      console.log("stop")
+      }
 
-    setInterval(() => {
-        const { days, hours, minutes, seconds } = convertMs(userDate - Date.now());
-        daysValue.textContent = String(days).padStart(2, '0')
-        hoursValue.textContent = String(hours).padStart(2, "0")
-        minutesValue.textContent = String(minutes).padStart(2,"0")
-        secondsValue.textContent = String(seconds).padStart(2, '0')
-        
-    }, 1000)
+  }, 1000);
+
 })
 
+flatpickr(dateInput, options)
