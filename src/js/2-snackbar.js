@@ -6,13 +6,15 @@ import "izitoast/dist/css/iziToast.min.css";
 
 const delayInput = document.querySelector("input[type=number]")
 const form = document.querySelector("form.form")
-const stateBtns = document.querySelector('fieldset')
+const fulfilledBtn = document.querySelector('input[value=fulfilled]')
+const rejectedBtn = document.querySelector("input[value=rejected]")
 
-
+console.log(rejectedBtn)
 
 form.addEventListener("submit", (event) => {
     event.preventDefault()
-    stateBtns.setAttribute("disabled","disabled")
+    fulfilledBtn.setAttribute("disabled", "disabled")
+    rejectedBtn.setAttribute("disabled","disabled")
     
     const delay = delayInput.value
 
@@ -29,17 +31,27 @@ form.addEventListener("submit", (event) => {
     
     promise.then(delay => {
         console.log(`✅ Fulfilled promise in ${delay}ms`)
+
         iziToast.show({
-                title: 'Sucsess',
-                message: `✅ Fulfilled promise in ${delay}ms`,
+            title: 'Sucsess',
+            message: `✅ Fulfilled promise in ${delay}ms`,
         });
+
+        fulfilledBtn.removeAttribute("disabled")
+        rejectedBtn.removeAttribute("disabled")
+
     })
         .catch((delay) => {
-        console.log(`❌ Rejected promise in ${delay}ms`)
+            console.log(`❌ Rejected promise in ${delay}ms`)
+            
         iziToast.error({
-                title: 'Error',
-                message: `❌ Rejected promise in ${delay}ms`,
-            });
+            title: 'Error',
+            message: `❌ Rejected promise in ${delay}ms`,
+        });
+            
+        fulfilledBtn.removeAttribute("disabled")
+        rejectedBtn.removeAttribute("disabled")
+
     })
     
 })
